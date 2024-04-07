@@ -13,8 +13,10 @@ let app, vm, map;
 
 async function main() {
   map = new Map("canvas1");
+  window.addEventListener("resize", resizeCanvas, false);
   initVue();
   vm.callStartCalc();
+  resizeCanvas();
 }
 
 function initVue() {
@@ -77,6 +79,15 @@ function initVue() {
     },
   })
   vm = app.mount('#app')
+}
+
+function resizeCanvas() {
+  let canvas = document.getElementById("canvas1");
+  let parent = canvas.parentElement;
+  canvas.width = parent.offsetWidth;
+  let h = Math.max(canvas.width * 0.5, window.innerHeight - canvas.offsetTop - 50);
+  canvas.height = h;
+  map.update();
 }
 
 function startCalc(data, output) {
