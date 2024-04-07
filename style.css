@@ -1,0 +1,93 @@
+[v-cloak] {
+  display: none;
+}
+
+html {
+  font-size: 14px;
+}
+
+/* for debugging */
+/* .row>div {
+  border: 1px solid rgb(196, 196, 196);
+} */
+
+/*.col-form-label {
+    text-align: right;
+}*/
+
+.form-control {
+  text-align: center !important;
+}
+
+label.btn {
+  padding: .25rem !important;
+}
+
+.row {
+  margin: 0 0 1px 0 !important;
+}
+
+.row>* {
+  padding: 0 !important;
+}
+
+select,
+select:focus,
+input[type="number"] {
+  font-size: 16px !important;
+  padding-top: .25rem !important;
+  padding-bottom: .25rem !important;
+  /* padding: .25rem 1.5rem .25rem .25rem !important; */
+}
+
+select,
+select:focus {
+  padding-left: .25rem !important;
+  padding-right: 1.5rem !important;
+}
+
+abbr[title1] {
+  position: relative;
+  /* ensure consistent styling across browsers */
+  text-decoration: underline dotted !important;
+  -webkit-text-decoration: underline dotted !important;
+  cursor: help;
+}
+
+abbr[title1]:hover::after,
+abbr[title1]:focus::after {
+  content: attr(title1);
+  white-space: pre;
+  text-align: right;
+  /* position tooltip like the native one */
+  position: absolute;
+  margin: 28px 0 0 0;
+  /* bottom: -50px; */
+  width: auto;
+  /* white-space: nowrap; */
+
+  /* style tooltip */
+  background-color: #1e1e1e;
+  color: #fff;
+  border-radius: 3px;
+  /* box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.4); */
+  font-size: 14px;
+  padding: 3px 5px;
+  z-index: 1000;
+  line-height: 1.5 !important;
+}
+
+abbr[tabindex="-1"]:hover::after,
+abbr[tabindex="-1"]:focus::after {
+  left: 0;
+}
+
+abbr[tabindex="-2"]:hover::after,
+abbr[tabindex="-2"]:focus::after {
+  right: 105%;
+}
+
+.noneClickButtons>label {
+  pointer-events: none;
+  opacity: 0.5;
+}
