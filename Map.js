@@ -4,6 +4,7 @@ export class Map {
     this.elementId = elementId;
     // this.grabContext();
     this.pxInUnit = 1;
+    this.numScale = 2;
     this.bgColor = "#f7fbff";
   }
 
@@ -38,10 +39,10 @@ export class Map {
     let x0 = Math.floor(this.canvas.width / 2) + 0.5;
     let y0 = Math.floor(this.canvas.height / 2) + 0.5;
     this.ctx.setTransform(1, 0, 0, -1, x0, y0);
-    let xMin = -x0;
-    let yMin = -y0;
-    let xMax = this.canvas.width - x0;
-    let yMax = this.canvas.height - y0;
+    this.xMin = -x0;
+    this.yMin = -y0;
+    this.xMax = this.canvas.width - x0;
+    this.yMax = this.canvas.height - y0;
 
     // this.ctx.scale(1 / this.scale, 1 / this.scale);
 
@@ -54,31 +55,36 @@ export class Map {
     this.ctx.strokeStyle = "#e9e9e9";
     for (let i = -cellsX; i <= cellsX; i++) {
       let x = cellSize * i;
-      this.line(x, yMin, x, yMax);
+      this.line(x, this.yMin, x, this.yMax);
     }
     for (let i = -cellsY; i <= cellsY; i++) {
       let y = cellSize * i;
-      this.line(xMin, y, xMax, y);
+      this.line(this.xMin, y, this.xMax, y);
     }
     this.ctx.strokeStyle = "#000000";
-    this.line(0, yMin, 0, yMax);
-    this.line(xMin, 0, xMax, 0);
+    this.line(0, this.yMin, 0, this.yMax);
+    this.line(this.xMin, 0, this.xMax, 0);
   }
 
   drawBeacons() {
     this.ctx.lineWidth = 0.5;
     let cnt = 0;
     for (let i = 0; i < this.beacons.length; i++) {
-      let p = this.beacons[i];
+      const beacon = this.beacons[i];
+      let p = beacon;
       this.ctx.fillStyle = p.c;
       this.ctx.strokeStyle = p.c;
       this.square(p.x, p.y, 5);
-      if (this.beacons[i].use && cnt < 3) {
+      if (beacon.use && cnt < 3) {
         this.circle(p.x, p.y, p.r);
+        let rflat = Math.round(Math.sqrt(beacon.r ** 2 - this.pos.z ** 2) / this.numScale);
+        this.drawText(`${beacon.n}: [${rflat}]`, (this.pos.x < 0) ? this.xMax : this.xMin, this.yMax - 20 - cnt * 10, false);
         cnt += 1;
       }
       this.ctx.font = '12px Times';
-      this.drawText(p.n, p.x + 3, p.y + 3);
+      this.drawText(p.n, p.x, p.y);
+
+
     }
   }
 
@@ -90,7 +96,7 @@ export class Map {
       let x = Math.round(this.pos.x);
       let y = Math.round(this.pos.y);
       let z = -Math.round(this.pos.z);
-      this.drawText(`${x},${y} (${z})`, this.pos.x + 3, this.pos.y + 3);
+      this.drawText(`${x},${y},${z}\n[${y / this.numScale},${x / this.numScale}]`, this.pos.x, this.pos.y);
     }
   }
 
@@ -115,11 +121,20 @@ export class Map {
     this.ctx.stroke();
   }
 
-  drawText(text, x, y) {
-    let s = this.scale(x, y);
+  drawText(text, x, y, doScale = true) {
+    let s = (doScale) ? this.scale(x, y) : { x: x, y: y };
+    let metrics = this.ctx.measureText(text);
+    let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+    let actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+    let lines = text.split('\n');
     this.ctx.save();
     this.ctx.scale(1, -1);
-    this.ctx.fillText(text, s.x, -s.y);
+    this.ctx.textAlign = (s.x < 0) ? "left" : "right";
+    let dx = (s.x < 0) ? 5 : -5;
+    // this.ctx.textBaseline = (s.y < 0) ? "bottom" : "top";
+    for (let i = 0; i < lines.length; i++) {
+      this.ctx.fillText(lines[i], s.x + dx, -(s.y - i * actualHeight));
+    }
     this.ctx.restore();
   }
 

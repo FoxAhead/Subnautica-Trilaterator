@@ -34,6 +34,7 @@ function initVue() {
             1000,
             1000,
           ],
+          numScale: 2,
         },
         output: {
           pos: {
@@ -46,7 +47,7 @@ function initVue() {
     },
     methods: {
       callStartCalc() {
-        let data = { beacons: [] };
+        let data = { beacons: [], numScale: this.input.numScale };
         for (let i = 0; i < m.length; i++) {
           data.beacons[i] = {
             x: m[i].x * this.input.beacon[i].d,
@@ -152,6 +153,7 @@ function snTrilaterate2(p1, p2, p3) {
 }
 
 function drawResults(data, output) {
+  map.numScale = data.numScale;
   map.beacons = data.beacons;
   map.pos = output.pos;
   map.update();
