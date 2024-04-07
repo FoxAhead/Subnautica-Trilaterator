@@ -24,55 +24,55 @@
           <div class="col-2"></div>
         </div> -->
         <div class="row justify-content-center align-items-center text-center">
-          <div class="col-2"></div>
-          <div class="col-2">Distance</div>
-          <div class="col-2">Setup</div>
+          <div class="col-lg-2 col-4"></div>
+          <div class="col-lg-2 col-4">Distance</div>
+          <div class="col-lg-2 col-4">Setup</div>
         </div>
         <div class="row justify-content-center align-items-center text-center">
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="checkbox" class="btn-check" id="inputUse0" v-model="input.beacon[0].use">
             <label class="btn btn-outline-primary" for="inputUse0">Beacon N</label>
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="11" class="form-control border-primary" id="inputDistTo0" v-model="input.distTo[0]">
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="15" class="form-control border-secondary" id="inputBeacon0" v-model="input.beacon[0].d">
           </div>
         </div>
         <div class="row justify-content-center align-items-center text-center">
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="checkbox" class="btn-check" id="inputUse1" v-model="input.beacon[1].use">
             <label class="btn btn-outline-primary" for="inputUse1">Beacon E</label>
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="12" class="form-control border-primary" id="inputDistTo1" v-model="input.distTo[1]">
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="16" class="form-control border-secondary" id="inputBeacon1" v-model="input.beacon[1].d">
           </div>
         </div>
         <div class="row justify-content-center align-items-center text-center">
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="checkbox" class="btn-check" id="inputUse2" v-model="input.beacon[2].use">
             <label class="btn btn-outline-primary" for="inputUse2">Beacon S</label>
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="13" class="form-control border-primary" id="inputDistTo2" v-model="input.distTo[2]">
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="17" class="form-control border-secondary" id="inputBeacon2" v-model="input.beacon[2].d">
           </div>
         </div>
         <div class="row justify-content-center align-items-center text-center">
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="checkbox" class="btn-check" id="inputUse3" v-model="input.beacon[3].use">
             <label class="btn btn-outline-primary" for="inputUse3">Beacon W</label>
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="14" class="form-control border-primary" id="inputDistTo3" v-model="input.distTo[3]">
           </div>
-          <div class="col-2">
+          <div class="col-lg-2 col-4">
             <input type="number" min="0" step="10" tabindex="18" class="form-control border-secondary" id="inputBeacon3" v-model="input.beacon[3].d">
           </div>
         </div>
@@ -94,10 +94,10 @@
         </div> -->
       </form>
       <div class="row justify-content-center align-items-center text-center">
-        <div class="col-6"><canvas id="canvas1" width="701" height="501"></canvas></div>
+        <div class="col"><canvas id="canvas1"></canvas></div>
       </div>
-      <div class="small">Version 1 ({{ getLastModified }})
-        - <a href="https://github.com/FoxAhead/">GitHub</a>
+      <div class="small">Version 2 ({{ getLastModified }})
+        - <a href="https://github.com/FoxAhead/Subnautica-Trilaterator">GitHub</a>
       </div>
     </div>
   </div>
