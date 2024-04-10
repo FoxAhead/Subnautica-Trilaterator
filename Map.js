@@ -6,6 +6,7 @@ export class Map {
     this.pxInUnit = 1;
     this.numScale = 2;
     this.bgColor = "#f7fbff";
+    this.positions = [];
   }
 
   grabContext() {
@@ -15,19 +16,24 @@ export class Map {
 
   setScale(x, y) {
     this.grabContext();
-    let sx = Math.ceil(Math.abs(x) * 1.1 * 2 / this.canvas.width);
-    let sy = Math.ceil(Math.abs(y) * 1.1 * 2 / this.canvas.height);
+    let maxx = Math.max(...this.positions.map(o => Math.abs(o.x)))
+    let maxy = Math.max(...this.positions.map(o => Math.abs(o.y)))
+    let sx = Math.ceil(maxx * 1.1 * 2 / this.canvas.width);
+    let sy = Math.ceil(maxy * 1.1 * 2 / this.canvas.height);
     this.pxInUnit = Math.max(1, sx, sy);
+    if (this.pxInUnit != this.pxInUnit) {
+      this.pxInUnit = 1;
+    }
   }
 
   update() {
-    this.bgColor = (this.pos.x != null) ? "#f7fbff" : "#ffeeee";
-    if (this.pos.x != null) {
-      this.setScale(this.pos.x, this.pos.y);
+    this.bgColor = (this.positions.length > 0) ? "#f7fbff" : "#ffeeee";
+    if (this.positions.length > 0) {
+      this.setScale();
     }
     this.setupGrid();
     this.drawBeacons();
-    this.drawPosition();
+    this.drawPositions();
   }
 
   setupGrid() {
@@ -71,32 +77,33 @@ export class Map {
     let cnt = 0;
     for (let i = 0; i < this.beacons.length; i++) {
       const beacon = this.beacons[i];
-      let p = beacon;
-      this.ctx.fillStyle = p.c;
-      this.ctx.strokeStyle = p.c;
-      this.square(p.x, p.y, 5);
+      const pos = beacon.pos;
+      this.ctx.fillStyle = beacon.c;
+      this.ctx.strokeStyle = beacon.c;
+      this.square(pos.x, pos.y, 5);
       if (beacon.use && cnt < 3) {
-        this.circle(p.x, p.y, p.r);
-        let rflat = Math.round(Math.sqrt(beacon.r ** 2 - this.pos.z ** 2) / this.numScale);
-        this.drawText(`${beacon.n}: [${rflat}]`, (this.pos.x < 0) ? this.xMax : this.xMin, this.yMax - 20 - cnt * 10, false);
+        this.circle(pos.x, pos.y, beacon.rxy);
+        let rflat = Math.round(beacon.rxy / this.numScale);
+        this.drawText(`${beacon.n}: [${rflat}]`, (pos.x < 0) ? this.xMax : this.xMin, this.yMax - 20 - cnt * 10, false);
         cnt += 1;
       }
       this.ctx.font = '12px Times';
-      this.drawText(p.n, p.x, p.y);
+      this.drawText(beacon.n, pos.x, pos.y);
 
 
     }
   }
 
-  drawPosition() {
+  drawPositions() {
     this.ctx.lineWidth = 1;
-    if (this.pos != null) {
-      this.ctx.fillStyle = "#000";
-      this.square(this.pos.x, this.pos.y, 7);
-      let x = Math.round(this.pos.x);
-      let y = Math.round(this.pos.y);
-      let z = -Math.round(this.pos.z);
-      this.drawText(`${x},${y},${z}\n[${y / this.numScale},${x / this.numScale}]`, this.pos.x, this.pos.y);
+    this.ctx.fillStyle = "#000";
+    for (let i = 0; i < this.positions.length; i++) {
+      const pos = this.positions[i];
+      this.square(pos.x, pos.y, 5);
+      let x = Math.round(pos.x);
+      let y = Math.round(pos.y);
+      let z = -Math.round(pos.z);
+      this.drawText(`${x},${y},${z}\n[${x / this.numScale},${y / this.numScale}]`, pos.x, pos.y);
     }
   }
 
