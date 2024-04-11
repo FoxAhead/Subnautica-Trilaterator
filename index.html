@@ -19,7 +19,7 @@
         <div class="row justify-content-center align-items-center text-center">
           <div class="col-lg-2 col-3">Depth</div>
           <div class="col-lg-2 col-3">
-            <input type="number" min="0" class="form-control border-primary" id="inputDepth" v-model="input.depth">
+            <input type="number" min="0" class="form-control border-primary" id="inputDepth" v-model="input.depth" @focus="$event.target.select()">
           </div>
           <div class="col-lg-2 col-3">Scale</div>
           <div class="col-lg-2 col-3"><input type="number" min="0" class="form-control border-primary" id="inputNumScale" v-model="input.numScale"></div>
@@ -44,16 +44,16 @@
         </div>
         <div class="row justify-content-center align-items-center text-center">
           <div class="col-lg-2 col-3">
-            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo0" v-model="input.distTo[0]">
+            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo0" v-model="input.distTo[0]" @focus="$event.target.select()">
           </div>
           <div class="col-lg-2 col-3">
-            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo1" v-model="input.distTo[1]">
+            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo1" v-model="input.distTo[1]" @focus="$event.target.select()">
           </div>
           <div class="col-lg-2 col-3">
-            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo2" v-model="input.distTo[2]">
+            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo2" v-model="input.distTo[2]" @focus="$event.target.select()">
           </div>
           <div class="col-lg-2 col-3">
-            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo3" v-model="input.distTo[3]">
+            <input type="number" min="0" step="10" class="form-control border-primary" id="inputDistTo3" v-model="input.distTo[3]" @focus="$event.target.select()">
           </div>
         </div>
         <div class="row justify-content-center align-items-center text-center">
@@ -90,7 +90,7 @@
       <div class="row justify-content-center align-items-center text-center">
         <div class="col"><canvas id="canvas1"></canvas></div>
       </div>
-      <div class="small">Version 6 ({{ getLastModified }})
+      <div class="small">Version 7 ({{ getLastModified }})
         - <a href="https://github.com/FoxAhead/Subnautica-Trilaterator">GitHub</a>
       </div>
     </div>

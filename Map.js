@@ -83,7 +83,7 @@ export class Map {
       this.ctx.fillStyle = beacon.c;
       this.ctx.strokeStyle = beacon.c;
       this.square(pos.x, pos.y, 5);
-      if (beacon.use && cnt < 3) {
+      if (beacon.use) {
         this.circle(pos.x, pos.y, beacon.rxy);
         let rxys = +(beacon.rxy / this.numScale).toFixed(1);
         this.drawText(`${beacon.n}: [${rxys}]`, (this.positions.length > 0 && this.positions[0].x < 0) ? this.xMax : this.xMin, this.yMax - 20 - cnt * fontHeight, false);
