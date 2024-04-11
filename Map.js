@@ -73,7 +73,9 @@ export class Map {
   }
 
   drawBeacons() {
-    this.ctx.lineWidth = 0.5;
+    this.ctx.lineWidth = 1;
+    let fontHeight = 14;
+    this.ctx.font = `bold ${fontHeight}px Verdana`;
     let cnt = 0;
     for (let i = 0; i < this.beacons.length; i++) {
       const beacon = this.beacons[i];
@@ -83,11 +85,10 @@ export class Map {
       this.square(pos.x, pos.y, 5);
       if (beacon.use && cnt < 3) {
         this.circle(pos.x, pos.y, beacon.rxy);
-        let rflat = Math.round(beacon.rxy / this.numScale);
-        this.drawText(`${beacon.n}: [${rflat}]`, (pos.x < 0) ? this.xMax : this.xMin, this.yMax - 20 - cnt * 10, false);
+        let rxys = +(beacon.rxy / this.numScale).toFixed(1);
+        this.drawText(`${beacon.n}: [${rxys}]`, (this.positions.length > 0 && this.positions[0].x < 0) ? this.xMax : this.xMin, this.yMax - 20 - cnt * fontHeight, false);
         cnt += 1;
       }
-      this.ctx.font = '12px Times';
       this.drawText(beacon.n, pos.x, pos.y);
 
 
@@ -96,14 +97,17 @@ export class Map {
 
   drawPositions() {
     this.ctx.lineWidth = 1;
+    this.ctx.font = 'bold 14px Verdana';
     this.ctx.fillStyle = "#000";
     for (let i = 0; i < this.positions.length; i++) {
       const pos = this.positions[i];
       this.square(pos.x, pos.y, 5);
-      let x = Math.round(pos.x);
-      let y = Math.round(pos.y);
-      let z = -Math.round(pos.z);
-      this.drawText(`${x},${y},${z}\n[${x / this.numScale},${y / this.numScale}]`, pos.x, pos.y);
+      let x = +pos.x.toFixed(1);
+      let y = +pos.y.toFixed(1);
+      let z = +pos.z.toFixed(1);
+      let xs = +(pos.x / this.numScale).toFixed(1);
+      let ys = +(pos.y / this.numScale).toFixed(1);
+      this.drawText(`${x}, ${y}, ${z}\n[${xs}, ${ys}]`, pos.x, pos.y);
     }
   }
 

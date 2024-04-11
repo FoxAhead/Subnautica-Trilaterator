@@ -180,7 +180,7 @@ function drawResults(data, output) {
   map.numScale = data.numScale;
   map.beacons = data.beacons;
   map.positions.length = 0;
-  map.positions.push({ x: output.pos.x, y: output.pos.y, z: data.depth });
+  map.positions.push({ x: output.pos.x, y: output.pos.y, z: -data.depth });
   map.update();
 }
 
