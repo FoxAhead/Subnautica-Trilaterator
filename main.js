@@ -63,7 +63,7 @@ function initVue() {
               z: 0,
             },
             r: this.input.distTo[i],
-            rxy: Math.sqrt(this.input.distTo[i] ** 2 - this.input.depth ** 2),
+            rxy: cathetus(this.input.distTo[i], this.input.depth),
             c: m[i].c,
             n: m[i].n + this.input.beacon[i].d,
             use: this.input.beacon[i].use
@@ -99,33 +99,51 @@ function resizeCanvas() {
 }
 
 function startCalc(data, output) {
-  let p = [];
+  let spheres = [];
   for (let i = 0; i < 4; i++) {
     if (data.beacons[i].use) {
-      p.push(data.beacons[i]);
+      spheres.push({ pos: data.beacons[i].pos, r: data.beacons[i].r });
     }
   }
-  undefineObjectProperties(output.pos);
-  if (p.length >= 3) {
-    calculate(p[0], p[1], p[2], output.pos);
-  }
+  output.pos = calculate(spheres, data.depth);
   drawResults(data, output);
 }
 
-function calculate(p1, p2, p3, pos) {
-  // let p4 = snTrilaterate(p1, p2, p3);
-  let circles = [];
-  circles.push({ pos: p1.pos, r: p1.rxy });
-  circles.push({ pos: p2.pos, r: p2.rxy });
-  circles.push({ pos: p3.pos, r: p3.rxy });
-  let p4 = radicalCenter(circles)
-  if (p4 !== null) {
-    pos.x = p4.x;
-    pos.y = p4.y;
-    pos.z = p4.z;
-  } else {
-    undefineObjectProperties(pos);
+function calculate(spheres, depth) {
+  const circles = [];
+  for (let i = 0; i < spheres.length; i++) {
+    circles.push({ pos: spheres[i].pos, r: cathetus(spheres[i].r, depth) });
   }
+  if (circles.length == 3) {
+    let rc = radicalCenter(circles);
+    return { x: rc.x, y: rc.y, z: -depth };
+  } else if (circles.length == 4) {
+    let rcs = { x: 0, y: 0 };
+    for (let i = 0; i < 4; i++) {
+      let circles2 = [];
+      for (let j = 0; j < circles.length; j++) {
+        if (j != i) {
+          circles2.push(circles[j]);
+        }
+      }
+      let rc = radicalCenter(circles2);
+      rcs.x += rc.x;
+      rcs.y += rc.y;
+    }
+    rcs.x = rcs.x / 4;
+    rcs.y = rcs.y / 4;
+    return { x: rcs.x, y: rcs.y, z: -depth };
+  }
+}
+
+function drawResults(data, output) {
+  map.numScale = data.numScale;
+  map.beacons = data.beacons;
+  map.positions.length = 0;
+  if (output.pos != undefined) {
+    map.positions.push({ x: output.pos.x, y: output.pos.y, z: -data.depth });
+  }
+  map.update();
 }
 
 function snTrilaterate(p1, p2, p3) {
@@ -176,14 +194,6 @@ function snTrilaterateOnce(p1, p2, p3) {
   }
 }
 
-function drawResults(data, output) {
-  map.numScale = data.numScale;
-  map.beacons = data.beacons;
-  map.positions.length = 0;
-  map.positions.push({ x: output.pos.x, y: output.pos.y, z: -data.depth });
-  map.update();
-}
-
 function initArray(arr, len, first = 0, delta = 0) {
   arr.length = len;
   arr.fill(0);
@@ -210,6 +220,10 @@ function undefineObjectProperties(obj) {
   }
 }
 
+function cathetus(c, a) {
+  return Math.sqrt(c ** 2 - a ** 2);
+}
+
 const determinant = m =>
   m.length == 1 ?
     m[0][0] :
@@ -221,29 +235,30 @@ const determinant = m =>
 
 function radicalCenter(circles) {
   if (circles.length == 3) {
-    let a = [];
-    let b = [];
-    let c = [];
+    const i = [1, 1, 1];
+    const a = [];
+    const b = [];
+    const c = [];
     for (let i = 0; i < circles.length; i++) {
       const circle = circles[i];
       a.push(-2 * circle.pos.x);
       b.push(-2 * circle.pos.y);
       c.push(circle.pos.x ** 2 + circle.pos.y ** 2 - circle.r ** 2);
     }
-    let deta = determinant([
-      [1, 1, 1],
+    const deta = determinant([
+      i,
       b,
       c,
     ]);
-    let detb = determinant([
+    const detb = determinant([
       a,
-      [1, 1, 1],
+      i,
       c,
     ]);
-    let detc = determinant([
+    const detc = determinant([
       a,
       b,
-      [1, 1, 1],
+      i,
     ]);
     return { x: deta / detc, y: detb / detc };
   }
