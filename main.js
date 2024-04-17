@@ -87,7 +87,9 @@ function initVue() {
       },
     },
     mounted() {
-      this.input = JSON.parse(localStorage.getItem("input"));
+      let storedInput = JSON.parse(localStorage.getItem("input"));
+      if (storedInput !== null)
+        Object.assign(this.input, storedInput);
     }
   })
   vm = app.mount('#app')
