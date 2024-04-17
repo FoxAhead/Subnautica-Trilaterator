@@ -80,11 +80,15 @@ function initVue() {
     watch: {
       input: {
         handler(newValue, oldValue) {
+          localStorage.setItem("input", JSON.stringify(this.input));
           this.callStartCalc();
         },
         deep: true
       },
     },
+    mounted() {
+      this.input = JSON.parse(localStorage.getItem("input"));
+    }
   })
   vm = app.mount('#app')
 }
